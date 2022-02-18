@@ -1,7 +1,6 @@
 package com.segovelo.async;
 
 import java.lang.reflect.Method;
-
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 
 /** 
@@ -14,8 +13,8 @@ public class CustomAsyncExceptionHandler implements AsyncUncaughtExceptionHandle
 
 	@Override
 	public void handleUncaughtException(final Throwable ex, final Method method, final Object... params) {
-        System.out.println("Exception message - " + ex.getMessage());
-        System.out.println("Method name - " + method.getName());
+        System.out.println("\t Exception message - " + ex.getMessage());
+        System.out.println("\t Method name - " + method.getName() + "\n\n");
         for (final Object param : params) {
             System.out.println("Param - " + param);
         }
