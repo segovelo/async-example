@@ -18,7 +18,7 @@ public class AsyncExampleApplication {
         Arrays.sort(beanNames);
         System.out.println("\n\n ===========================  Bean names =============================");
         for (String beanName : beanNames) {
-            System.out.println(beanName);
+            System.out.println("\t" + beanName);
         }
         System.out.println("\n\n ========================================================================");
 	}

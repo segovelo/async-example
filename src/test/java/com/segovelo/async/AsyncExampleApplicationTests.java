@@ -1,4 +1,4 @@
-package com.segovelo.asyncexample;
+package com.segovelo.async;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
