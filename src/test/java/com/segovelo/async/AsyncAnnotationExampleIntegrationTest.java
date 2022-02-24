@@ -1,64 +1,70 @@
 package com.segovelo.async;
 
+import com.segovelo.async.config.SpringAsyncConfig;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import com.segovelo.async.config.SpringAsyncConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-/** 
-* 18 Feb 2022 11:12:19
-* @Javadoc TODO 
-*
-* @author Sebastian Vergara Losada  **/
 
+/**
+ * 18 Feb 2022 11:12:19 @Javadoc TODO
+ *
+ * @author Sebastian Vergara Losada *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { SpringAsyncConfig.class }, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(
+    classes = {SpringAsyncConfig.class},
+    loader = AnnotationConfigContextLoader.class)
 public class AsyncAnnotationExampleIntegrationTest {
-	
-    @Autowired
-    private AsyncComponent asyncAnnotationExample;
 
-    // tests
+  @Autowired private AsyncComponent asyncAnnotationExample;
 
-    @Test
-    public void testAsyncAnnotationForMethodsWithVoidReturnType() {
-        System.out.println("\n\n\t Start - invoking an asynchronous method asyncMethodWithVoidReturnType(). currentThread : " + Thread.currentThread().getName());
-        asyncAnnotationExample.asyncMethodWithVoidReturnType();
-        System.out.println("\t End - invoking an asynchronous method. ");
+  // tests
+
+  @Test
+  public void testAsyncAnnotationForMethodsWithVoidReturnType() {
+    System.out.println(
+        "\n\n\t Start - invoking an asynchronous method asyncMethodWithVoidReturnType(). currentThread : "
+            + Thread.currentThread().getName());
+    asyncAnnotationExample.asyncMethodWithVoidReturnType();
+    System.out.println("\t End - invoking an asynchronous method. ");
+  }
+
+  @Test
+  public void testAsyncAnnotationForMethodsWithReturnType()
+      throws InterruptedException, ExecutionException {
+    System.out.println(
+        "\n\n\t Start - invoking an asynchronous method asyncMethodWithReturnType().  currentThread : "
+            + Thread.currentThread().getName());
+    final Future<String> future = asyncAnnotationExample.asyncMethodWithReturnType();
+
+    while (true) {
+      if (future.isDone()) {
+        System.out.println("\t Result from asynchronous process - " + future.get());
+        break;
+      }
+      System.out.println("\t Continue doing something else. ");
+      Thread.sleep(1000);
     }
+  }
 
-    @Test
-    public void testAsyncAnnotationForMethodsWithReturnType() throws InterruptedException, ExecutionException {
-        System.out.println("\n\n\t Start - invoking an asynchronous method asyncMethodWithReturnType().  currentThread : " + Thread.currentThread().getName());
-        final Future<String> future = asyncAnnotationExample.asyncMethodWithReturnType();
+  @Test
+  public void testAsyncAnnotationForMethodsWithConfiguredExecutor() {
+    System.out.println(
+        "\n\n\t Start - invoking an asynchronous method asyncMethodWithConfiguredExecutor(). ");
+    asyncAnnotationExample.asyncMethodWithConfiguredExecutor();
+    System.out.println("\t End - invoking an asynchronous method. ");
+  }
 
-        while (true) {
-            if (future.isDone()) {
-                System.out.println("\t Result from asynchronous process - " + future.get());
-                break;
-            }
-            System.out.println("\t Continue doing something else. ");
-            Thread.sleep(1000);
-        }
-    }
-
-    @Test
-    public void testAsyncAnnotationForMethodsWithConfiguredExecutor() {
-        System.out.println("\n\n\t Start - invoking an asynchronous method asyncMethodWithConfiguredExecutor(). ");
-        asyncAnnotationExample.asyncMethodWithConfiguredExecutor();
-        System.out.println("\t End - invoking an asynchronous method. ");
-    }
-
-    @Test
-    public void testAsyncAnnotationForMethodsWithException() throws Exception {
-        System.out.println("\n\n\t Start - invoking an asynchronous method asyncMethodWithExceptions(). ");
-        asyncAnnotationExample.asyncMethodWithExceptions();
-        System.out.println("\t End - invoking an asynchronous method. ");
-    }
-
+  @Test
+  public void testAsyncAnnotationForMethodsWithException() throws Exception {
+    System.out.println(
+        "\n\n\t Start - invoking an asynchronous method asyncMethodWithExceptions(). ");
+    asyncAnnotationExample.asyncMethodWithExceptions();
+    System.out.println("\t End - invoking an asynchronous method. ");
+  }
 }
